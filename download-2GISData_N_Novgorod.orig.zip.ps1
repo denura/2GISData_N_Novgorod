@@ -1,5 +1,7 @@
 # http://rprokhorov.ru/?p=254
-Clear-host
+
+Set-ExecutionPolicy RemoteSigned -Scope Process -force
+#Clear-host
 # Подавляем вывод
 $ErrorActionPreference = "silentlycontinue"
 # Присваивание переменных
