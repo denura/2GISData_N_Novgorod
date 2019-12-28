@@ -1,9 +1,8 @@
 # http://rprokhorov.ru/?p=254
-
 Set-ExecutionPolicy RemoteSigned -Scope Process -force
-#Clear-host
+Clear-host
 # Подавляем вывод
-$ErrorActionPreference = "silentlycontinue"
+#$ErrorActionPreference = "silentlycontinue"
 # Присваивание переменных
 $Software = "База данных 2GIS Нижнего Новгорода (.orig.zip)"
 $DistribPath = '.\'
@@ -18,11 +17,12 @@ Write-Host "Product: $Software"
 
 if (test-path $DistribPath\2gis\3.0\Data_N_Novgorod.dgdat)
 {
-	Write-Host "Найден распакованный файл Data_N_Novgorod.dgdat"
 	$date1 = (dir $DistribPath\2gis\3.0 -Filter Data_N_Novgorod.dgdat -ErrorAction Silentlycontinue).LastWriteTime
     $ver1 = ((((dir $DistribPath  -Filter 2GISData_N_Novgorod-*.orig.zip -ErrorAction Silentlycontinue).Name).Split("-"))[1]).Split(".")[0]
+    Write-Host "Найден распакованный файл Data_N_Novgorod.dgdat версии $ver1 от $date1"
 }
 $HttpContent = Invoke-WebRequest -URI $URLPage -UseBasicParsing
+if ($HttpContent) {
 
 $HttpContent.Links | Foreach{
     if ($_.href -like "http://download.2gis.com/arhives/2GISData_N_Novgorod-*.orig.zip")
@@ -105,5 +105,7 @@ else
     $wc.DownloadFile($DownLoadURL, $destination)
 	pause
 }
-
+} else {
+    Write-Warning "Unable to get content from a web page on the internet."
+}
 Write-Host "-===========-" -ForegroundColor Green
